@@ -16,6 +16,7 @@
             include '../../includes/navbar.php'; 
             include '../../includes/sidebar.php';
         ?>
+
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
@@ -23,14 +24,14 @@
                 <div class="container-fluid">
                     <div class="row mb-1">
                         <div class="col-sm">
-                            <h1>Stok Barang</h1>
+                            <h1>Tabel Penjualan</h1>
                         </div>
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="../apoteker/view.php">Beranda</a></li>
-                            <li class="breadcrumb-item active">Stok Barang</li>
+                            <li class="breadcrumb-item active">Tabel Penjualan</li>
                         </ol>
                         <div class="col-sm-1">
-                            <a class="btn btn-info" href=" form_stok.php">
+                            <a class="btn btn-info" href=" form_jual.php">
                                 <i class="fas fa-plus"></i> Tambah
                             </a>
                         </div>
@@ -49,66 +50,79 @@
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body table-responsive">
-                                    <table id="stok" name="stok" class=" table-bordered table-striped" cellpadding="10"
-                                        cellspacing="0">
+                                    <table id="penjualan" name="penjualan" class="table-bordered table-striped"
+                                        cellpadding="10" cellspacing="0">
                                         <thead>
                                             <tr>
                                                 <th class="center sorting">No</th>
-                                                <th>Kode Barang</th>
-                                                <th>Nama Barang</th>
                                                 <th>Tanggal</th>
-                                                <th>Masuk</th>
-                                                <th>Keluar</th>
-                                                <th>Tersisa</th>
-                                                <th>Batch</th>
-                                                <th>Expired</th>
-                                                <th>Keterangan</th>
+                                                <th>ID Karyawan</th>
+                                                <th>Nama Karyawan</th>
+                                                <th>ID Pelanggan</th>
+                                                <th>Nama Pelanggan</th>
+                                                <th>ID Barang</th>
+                                                <th>Nama Barang</th>
+                                                <th>Jumlah</th>
+                                                <th>Harga Jual</th>
+                                                <th>Diskon</th>
+                                                <th>Pajak</th>
+                                                <th>Total</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php
-
-$no = 0;
 include '../../includes/connect.php'; 
 
-$sql = $conn->query("SELECT b.kode, b.barang, ks.tgl, ks.masuk, ks.keluar, ks.sisa, ks.batch, ks.expired, ks.keterangan
-FROM kartustok ks 
-INNER JOIN barang b ON ks.id_barang = b.kode
- ");
-while ($data = $sql->fetch_assoc()) {
-$no++;
+$no = 0;
+$sql = $conn->query("SELECT pj.tgl, k.nip, k.karyawan, pg.id, pg.pelanggan, b.kode, b.barang, pj.jumlah, pj.harga_jual, pj.diskon, pj.pajak, pj.total
+FROM penjualan pj
+INNER JOIN karyawan k ON pj.id_karyawan = k.id
+INNER JOIN pelanggan pg ON pj.id_pelanggan= pg.id
+INNER JOIN barang b ON pj.id_barang= b.kode");
+while ($data = $sql->fetch_assoc()) {   
+    $no++;
 ?>
                                             <tr>
                                                 <td>
                                                     <?php echo $no; ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $data['kode'] ; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $data['barang'] ; ?>
-                                                </td>
-                                                <td>
                                                     <?php echo $data['tgl'] ; ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $data ['masuk'] ; ?>
+                                                    <?php echo $data['nip'] ; ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $data ['keluar'] ; ?>
+                                                    <?php echo $data['karyawan'] ; ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $data ['sisa'] ; ?>
+                                                    <?php echo $data ['id'] ; ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $data ['batch'] ; ?>
+                                                    <?php echo $data ['pelanggan'] ; ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $data ['expired'] ; ?>
+                                                    <?php echo $data ['kode'] ; ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $data ['keterangan'] ; ?>
+                                                    <?php echo $data ['barang'] ; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $data ['jumlah'] ; ?>
+                                                </td>
+                                                </td>
+                                                <td>
+                                                    <?php echo $data ['harga_jual'] ; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $data ['diskon'] ; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $data ['pajak'] ; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $data ['total'] ; ?>
                                                 </td>
                                                 <td>
                                                     <a href="#" class="btn btn-success">Edit</a>
@@ -131,7 +145,7 @@ $no++;
             </section>
             <!-- /.content -->
         </div>
-        <?php include '../includes/footer.php'; ?>
+        <?php include '../../config/footer.php'; ?>
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
             <!-- Control sidebar content goes here -->
